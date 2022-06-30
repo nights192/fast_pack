@@ -33,6 +33,11 @@ class ImagePackData:
     interpolation: str
     socket: str
 
+    ## For convenience--as our process operates in phases due to the
+    ## global nature of the final atlas' data.
+    def load_image(self):
+        self.image = load_image(self.bl_image)
+
 class MaterialUVSymbol:
     """A symbol representing an as of-yet unresolved reference to a model's sub-UV table.
 
@@ -109,7 +114,7 @@ def retrieve_images_and_uvs(target_objs, node_blacklist):
             material_uvs = obj_uvs[i]
             
             # Each of these corresponds to a UV in material_uvs.
-            uv_links = [MaterialUVSymbol(None, None) for uv in material_uvs]
+            uv_links = [MaterialUVSymbol(None, None) for _ in material_uvs]
             
             root_nodes = fetch_search_roots(build_node_relations(mat), node_blacklist)
             mat_images = [elem for root_node in root_nodes for socket in root_node.n_to for elem in grab_socket_images(mesh, root_node, socket)]
@@ -146,7 +151,7 @@ def retrieve_images_and_uvs(target_objs, node_blacklist):
                 uvs[uv_index].append(link_ref)
                 
                 for (image, interp, src_socket) in link.images:
-                    image_data = ImagePackData(load_image(image), image, uv_index, interp, src_socket)
+                    image_data = ImagePackData(None, image, uv_index, interp, src_socket)
                     images[image] = image_data
     
     return (images, uvs)
