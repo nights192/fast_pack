@@ -2,6 +2,7 @@ import bpy
 
 class ImagePackingGroup(bpy.types.PropertyGroup):
     socket: bpy.props.StringProperty(name="Socket Name")
+
     target_group: bpy.props.IntProperty(name="Target Group", description="The target grouping id for related images to be included under",
     default=0, subtype='UNSIGNED', min=0)
 

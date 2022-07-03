@@ -22,4 +22,5 @@ class PackTextures(bpy.types.Operator):
     bl_label = "Pack textures"
 
     def execute(self, context):
+        context.window_manager.fpack_state.build(context.window_manager.fpack_max_res)
         return {'FINISHED'}

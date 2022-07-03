@@ -46,7 +46,7 @@ class MaterialUVSymbol:
         images ((bpy.types.Image, str, str)): A list of tuples beholden to this link; leveraged contagiously to determine uv_index, consisting of the Image, its interpolation, and the socket through which it had been discovered.
     """
 
-    def __init__(self, uv_index = None, images = None):
+    def __init__(self, uv_index: int = None, images: list[(bpy.types.Image, str, str)] = None):
         if images == None:
             self.images = []
         else:
@@ -57,8 +57,8 @@ class MaterialUVSymbol:
     def __str__(self):
         return f'Link: {self.uv_index} | {self.images}'
 
-def load_image(bl_image):
-    """Generates a PIL Image from a bpy.types.Image."""
+def load_image(bl_image: bpy.types.Image) -> Image:
+    """Generates a PIL Image from a Blender image."""
 
     bl_data = np.asarray(bl_image.pixels)
     (width, height) = bl_image.size
@@ -77,8 +77,8 @@ def load_image(bl_image):
 
     return image
 
-def fetch_obj_material_loops(obj):
-    mesh = obj.data
+def fetch_obj_material_loops(obj: bpy.types.Object) -> list[list[list[int]]]:
+    mesh: bpy.types.Mesh = obj.data
     res = [[[] for uv in mesh.uv_layers] for mat in obj.material_slots]
     
     default_uv = mesh.uv_layers.active
@@ -96,7 +96,7 @@ def fetch_obj_material_loops(obj):
     
     return res
 
-def retrieve_images_and_uvs(target_objs, node_blacklist):
+def retrieve_images_and_uvs(target_objs: list[bpy.types.Object], node_blacklist: set[bpy.types.Node]) -> tuple[dict[bpy.types.Image, ImagePackData], list[list[UVReference]]]:
     """Given a list of target objects, isolate all independent images and UV map partitions present."""
 
     images = {}
