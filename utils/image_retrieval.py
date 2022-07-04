@@ -144,6 +144,9 @@ def retrieve_images_and_uvs(target_objs: list[bpy.types.Object], node_blacklist:
             for uv_slot, link in enumerate(uv_links):
                 # Should the link be divorced from all discovered
                 # sub-UVs...
+                if len(material_uvs[uv_slot]) == 0:
+                    continue
+
                 if link.uv_index == None:
                     link.uv_index = len(uvs)
                     uvs.append([]) # We instantiate a new sub-UV list.
@@ -167,10 +170,18 @@ def replace_images(target_objs: list[bpy.types.Object], node_blacklist: set[bpy.
 
     image_groups = {pack.bl_image : group_index for group_index, pack_list in group_images.items() for pack in pack_list}
 
+    processed_mats = set()
     for obj in target_objs:
         for slot in obj.material_slots:
+            ## Process is destructive; hence, we want to exempt pre-processed materials.
+            if slot.material in processed_mats:
+                continue
+            
+            processed_mats.add(slot.material)
             root_nodes = fetch_search_roots(build_node_relations(slot.material), node_blacklist)
             mat_images = [elem for root_node in root_nodes for socket in root_node.n_to for elem in grab_socket_image_nodes(obj.data, root_node, socket)]
             
             for image_node in mat_images:
+                color_type = image_node.image.colorspace_settings.name
                 image_node.image = baked_textures[image_groups[image_node.image]]
+                image_node.image.colorspace_settings.name = color_type

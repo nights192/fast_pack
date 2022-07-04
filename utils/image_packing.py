@@ -33,14 +33,9 @@ class UVRectangle:
         rx2 = rect.x + rect.width
         ry2 = rect.y + rect.height
 
-        print(f"Item 1: Point 1: ({x}, {y})\tPoint 2: (P{x2}, {y2})")
-        print(f"Item 2: Point 1: ({rect.x}, {rect.y})\tPoint 2: (P{rx2}, {ry2})")
-
         overlaps_horizontally = (x <= rect.x and rect.x < x2) or (rect.x < x and x < rx2)
-        print(overlaps_horizontally)
 
         overlaps_vertically = (y <= rect.y and rect.y < y2) or (rect.y < y and y < ry2)
-        print(overlaps_vertically)
 
         return overlaps_horizontally and overlaps_vertically
 
