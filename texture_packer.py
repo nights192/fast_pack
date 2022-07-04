@@ -1,8 +1,8 @@
 from collections import defaultdict
 from functools import reduce
-from .utils.image_retrieval import ImagePackData, retrieve_images_and_uvs
-from .utils.image_packing import calculate_uv_ratios, pack_uvs
-from .utils.image_packing import size_group_images
+from .utils.shader_graph import grab_socket_image_nodes
+from .utils.image_retrieval import ImagePackData, load_image, retrieve_images_and_uvs, load_atlases, replace_images
+from .utils.image_packing import calculate_uv_ratios, size_group_images, pack_uvs, pack_images
 import bpy
 
 def denormalized(x: float):
@@ -17,6 +17,8 @@ class TexturePacker:
     """Manages the state of an unpacked selection of UVs."""
 
     def __init__(self, objs: list[bpy.types.Object], node_blacklist: set[bpy.types.Node]):
+        self.objs = objs
+        self.blacklist= node_blacklist
         (self.image_packs, self.uvs) = retrieve_images_and_uvs(objs, node_blacklist)
 
         # Initial sorting of image_packs ought to be by material input.
@@ -55,6 +57,13 @@ class TexturePacker:
         # Resize our images as appropriate, saving the scaling information such that we may detect
         # relative maximum sizes of our atlases.
         group_scales = size_group_images(group_images, uv_reference_surface_areas)
-        pack_uvs(self.uvs)
+
+        try:
+            uv_transforms = pack_uvs(self.uvs, uv_widths_normalized, uv_heights_normalized)
+        except:
+            return False
+
+        pack_images(group_images, group_scales, uv_transforms, max_res)
+        replace_images(self.objs, self.blacklist, group_images, load_atlases(group_images.keys()))
 
         return True

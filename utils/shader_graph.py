@@ -90,6 +90,26 @@ def fetch_search_roots(graph: Dict[bpy.types.Node, GraphNode], blacklist: set[bp
     
     return roots
 
+def grab_socket_image_nodes(mesh: bpy.types.Mesh, g_node: GraphNode, socket: str) -> list[bpy.types.ShaderNodeTexImage]:
+    """Given a starting position in the graph and a socket id, crawl and locate
+    all connected images, treating the inputs as though they were a DAG.
+    """
+
+    res = []
+    
+    node_stack = deque([node for node in g_node.n_to[socket]])
+    while len(node_stack) != 0:
+        cur_node = node_stack.pop()
+        
+        if cur_node.node.bl_idname == "ShaderNodeTexImage":            
+            res.append(cur_node.node)
+        else:
+            for cur_socket in cur_node.n_to.values():
+                for node in cur_socket:
+                    node_stack.append(node)
+    
+    return res
+
 def grab_socket_images(mesh: bpy.types.Mesh, g_node: GraphNode, socket: str) -> list[(bpy.types.Image, str, str, str)]:
     """Given a starting position in the graph and a socket id, crawl and locate
     all connected images, treating the inputs as though they were a DAG.

@@ -1,4 +1,5 @@
 from ..texture_packer import TexturePacker
+from ..utils.image_packing import get_file_name
 import bpy
 
 class RefreshTexturePacker(bpy.types.Operator):
@@ -22,5 +23,13 @@ class PackTextures(bpy.types.Operator):
     bl_label = "Pack textures"
 
     def execute(self, context):
-        context.window_manager.fpack_state.build(context.window_manager.fpack_max_res)
+        # As the operations undertaken are mutable, we split off into a new file.
+        #original_file = f'{bpy.path.abspath("//")}/{bpy.path.basename(bpy.data.filepath)}'
+        bpy.ops.wm.save_as_mainfile(filepath=f'{bpy.path.abspath("//")}/{get_file_name()}_baked.blend')
+
+        if not context.window_manager.fpack_state.build(context.window_manager.fpack_max_res):
+            #bpy.ops.wm.open_mainfile(filepath=original_file)
+            pass
+        
+        bpy.ops.wm.save_mainfile()
         return {'FINISHED'}

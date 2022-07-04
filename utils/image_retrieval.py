@@ -1,7 +1,10 @@
 from dataclasses import dataclass
+from collections import defaultdict
+import enum
+from logging import root
 from PIL import Image
 import numpy as np
-from .shader_graph import fetch_search_roots, build_node_relations, grab_socket_images
+from .shader_graph import fetch_search_roots, build_node_relations, grab_socket_images, grab_socket_image_nodes
 import bpy
 
 @dataclass
@@ -155,3 +158,19 @@ def retrieve_images_and_uvs(target_objs: list[bpy.types.Object], node_blacklist:
                     images[image] = image_data
     
     return (images, uvs)
+
+def load_atlases(groups: list[int]) -> list[bpy.types.Image]:
+    return [bpy.data.images.load(f"//{group}.png") for group in groups]
+
+def replace_images(target_objs: list[bpy.types.Object], node_blacklist: set[bpy.types.Node], group_images: defaultdict[int, list[ImagePackData]], baked_textures: list[bpy.types.Image]):
+    """Replaces shader images with their atlased alternatives. (Destructive)"""
+
+    image_groups = {pack.bl_image : group_index for group_index, pack_list in group_images.items() for pack in pack_list}
+
+    for obj in target_objs:
+        for slot in obj.material_slots:
+            root_nodes = fetch_search_roots(build_node_relations(slot.material), node_blacklist)
+            mat_images = [elem for root_node in root_nodes for socket in root_node.n_to for elem in grab_socket_image_nodes(obj.data, root_node, socket)]
+            
+            for image_node in mat_images:
+                image_node.image = baked_textures[image_groups[image_node.image]]
