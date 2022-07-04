@@ -129,6 +129,7 @@ def retrieve_images_and_uvs(target_objs: list[bpy.types.Object], node_blacklist:
                     continue
                 
                 parsed_images.add(image)
+                owning_mat_uv = uv_links[uv_slots[uv]]
                 
                 # No need to explicitly scan this image later; hence, we continue,
                 # updating our uv link resolution if necessary.
@@ -138,9 +139,8 @@ def retrieve_images_and_uvs(target_objs: list[bpy.types.Object], node_blacklist:
                     
                     continue
                 
-                owning_mat_uv = uv_links[uv_slots[uv]]
                 owning_mat_uv.images.append((image, interp, src_socket))
-            
+
             for uv_slot, link in enumerate(uv_links):
                 # Should the link be divorced from all discovered
                 # sub-UVs...
