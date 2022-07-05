@@ -4,6 +4,7 @@ A generic texture atlasing tool that, given a selection of objects, packs all of
 ## Usage:
 Leveraging FastPack is fairly painless; to begin atlasing your mesh, you need only:
 
+0. Ensure that the Python "Pillow" library is installed onto Blender's Python install. (Will be done automatically in the future.)
 1. Select all of the objects you intend to atlas together.
 2. Open your sidebar.
 3. Navigate to the "FastPack" section.
