@@ -9,7 +9,7 @@ import bpy
 
 @dataclass
 class UVReference:
-    """Provides a list of loop incides and their commensurate lookup information. Used in a list to keep track of related, cross-object UVs.
+    """Provides a list of loop indices and their commensurate lookup information. Used in a list to keep track of related, cross-object UVs.
     
     Attributes:
         object (bpy.types.Object): The given UV loops' object.
