@@ -45,18 +45,22 @@ class UVRectangle:
 def resize_algorithm(image_pack: ImagePackData) -> int:
     """Translates from Blender's string-enum of resize options to PIL's."""
 
-    match image_pack.interpolation:
-        case 'Linear':
-            return Image.LINEAR
-        
-        case 'Closest':
-            return Image.NEAREST
-        
-        case 'Cubic':
-            return Image.CUBIC
-        
-        case _:
-            return Image.LINEAR
+    ##
+    ##match image_pack.interpolation:
+    ##    case 'Linear':
+    if image_pack.interpolation == 'Linear':
+        return Image.LINEAR
+    
+    if image_pack.interpolation == 'Closest':
+    ##    case 'Closest':
+        return Image.NEAREST
+    
+    if image_pack.interpolation == 'Cubic':
+    ##    case 'Cubic':
+        return Image.CUBIC
+    
+    ##    case _:
+    return Image.LINEAR
 
 def calculate_uv_ratios(images: dict[bpy.types.Image, ImagePackData], uvs: list[list[UVReference]], max_res: int):
     # We must calculate the maximum percentage surface area occupied by our images per UV. This is to be a barometer for what must be resized.
