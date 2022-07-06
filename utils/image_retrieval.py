@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from collections import defaultdict
-import enum
 from logging import root
 from PIL import Image
 import numpy as np

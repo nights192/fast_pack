@@ -2,26 +2,43 @@ bl_info = {
     "name": "FastPack",
     "description": "A flexible texture-atlasing tool.",
     "author": "Archie",
-    "version": (0, 85),
+    "version": (0, 9),
     "blender": (3, 0, 0),
     "location": "View3D",
     "category": "Object",
 }
 
 import bpy
-from .ops import RefreshTexturePacker
-from .ops import PackTextures
 from .ui import ImagePackingGroup
-from .ui import ARC_UL_IPList
-from .ui import FastPackMenu
 
-classes = [
-    ImagePackingGroup,
-    RefreshTexturePacker,
-    PackTextures,
-    ARC_UL_IPList,
-    FastPackMenu
-]
+classes = []
+
+## We load the bulk of our addon should Pillow be present; otherwise, we need only initialize what's present
+## in the installer.
+try:
+    from PIL import Image
+    from .ops import RefreshTexturePacker
+    from .ops import PackTextures
+    from .ui import ARC_UL_IPList
+    from .ui import FastPackMenu
+
+    classes = [
+        ImagePackingGroup,
+        RefreshTexturePacker,
+        PackTextures,
+        ARC_UL_IPList,
+        FastPackMenu
+    ]
+
+except ImportError:
+    from .installer_ops import InstallPillow
+    from .ui import InstallerMenu
+
+    classes = [
+        ImagePackingGroup,
+        InstallPillow,
+        InstallerMenu
+    ]
 
 def register():
     for cls in classes:

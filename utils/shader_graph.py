@@ -1,6 +1,6 @@
 from enum import Enum
 from collections import deque
-from typing import Dict, Set
+from typing import Dict
 
 import bpy
 

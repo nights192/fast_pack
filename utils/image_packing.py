@@ -2,11 +2,9 @@ from collections import defaultdict
 from dataclasses import dataclass
 from .image_retrieval import ImagePackData
 from .image_retrieval import UVReference
-from ..ui import ImagePackingGroup
 from ..exceptions import PackingException
 from PIL import Image
 
-import functools
 import math
 import re
 import numpy as np

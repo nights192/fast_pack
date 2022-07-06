@@ -3,7 +3,7 @@ from ..utils.image_packing import get_file_name
 import bpy
 
 class RefreshTexturePacker(bpy.types.Operator):
-    """Fetches the requisite information to compile a list of packable textures"""
+    """Fetches the requisite information to compile a list of packable textures. May take a while"""
 
     bl_idname = "arcfpack.refresh_texture_packer"
     bl_label = "Update texture packing scene state"
