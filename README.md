@@ -1,4 +1,4 @@
-# Blender FastPack
+# Blender FastPack (Blender 3.0+)
 A generic texture atlasing tool that, given a selection of objects, packs all of their shader inputs into a set of texture atlases, allowing an artist to limit the number of materials used on their model without requiring further thought on their part.
 
 ## Usage:
