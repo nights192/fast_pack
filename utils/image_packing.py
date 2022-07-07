@@ -151,8 +151,8 @@ def place_rect(packing_rects: list[UVRectangle], rect: UVRectangle, stride_x: fl
     ## Deeply sub-optimal; however, this saves us from persisting a variable outside the function,
     ## or leveraging a goto. It would be difficult for there to be a sufficient amount of small images to
     ## make this unacceptably slow.
-    for y in np.arange(0.0, 1.0 - rect.width, stride_y):
-        for x in np.arange(0.0, 1.0 - rect.height, stride_x):
+    for y in np.arange(0.0, 1.0 - rect.height, stride_y):
+        for x in np.arange(0.0, 1.0 - rect.width, stride_x):
             success = True
             for col_rect in packing_rects:
                 success = success and not rect.could_overlap(x, y, col_rect)
