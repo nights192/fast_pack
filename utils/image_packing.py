@@ -103,7 +103,7 @@ def size_group_images(group_images, uv_reference_surface_areas) -> defaultdict[i
             (w, h) = pack.bl_image.size
 
             scale_factor = group_scale / ((w * h) / uv_reference_surface_areas[pack.uv_index])**0.5
-            pack.image.resize((w * scale_factor, h * scale_factor), resize_algorithm(pack))
+            pack.image.resize((int(w * scale_factor), int(h * scale_factor)), resize_algorithm(pack))
     
     return group_scales
 
