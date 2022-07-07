@@ -125,7 +125,10 @@ def grab_socket_images(mesh: bpy.types.Mesh, g_node: GraphNode, socket: str) -> 
             uv = mesh.uv_layers.active.name
             
             if 'Vector' in cur_node.n_to:
-                uv = cur_node.n_to['Vector'][0].node.uv_map
+                uv_node = cur_node.n_to['Vector'][0].node
+                
+                if uv_node.bl_idname == "ShaderNodeUVMap":
+                    uv = uv_node.uv_map
             
             res.append((cur_node.node.image, uv, cur_node.node.interpolation, socket))
         else:

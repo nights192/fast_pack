@@ -2,7 +2,7 @@ bl_info = {
     "name": "FastPack",
     "description": "A flexible texture-atlasing tool.",
     "author": "Archie",
-    "version": (0, 9),
+    "version": (0, 95),
     "blender": (3, 0, 0),
     "location": "View3D",
     "category": "Object",
